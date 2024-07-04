@@ -4,6 +4,11 @@ using ChiropracticApi.Data;
 using ChiropracticApi.Models;
 using ChiropracticApi.Dtos;
 using AutoMapper;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System;
 
 namespace ChiropracticApi.Controllers
 {
@@ -13,121 +18,209 @@ namespace ChiropracticApi.Controllers
     {
         private readonly ChiropracticContext _context;
         private readonly IMapper _mapper;
+        private readonly ILogger<RoleController> _logger;
 
-        public RoleController(ChiropracticContext context, IMapper mapper)
+        public RoleController(ChiropracticContext context, IMapper mapper, ILogger<RoleController> logger)
         {
             _context = context;
             _mapper = mapper;
+            _logger = logger;
         }
 
         /// <summary>
-        /// Gets all roles.
+        /// Obtiene todos los roles.
         /// </summary>
-        /// <returns>List of RoleDto</returns>
+        /// <returns>Lista de RoleDto.</returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RoleDto>>> GetRoles()
+        public async Task<IActionResult> GetRoles()
         {
-            var roles = await _context.Role.ToListAsync();
-            var roleDtos = _mapper.Map<IEnumerable<RoleDto>>(roles);
-            return Ok(roleDtos);
-        }
-
-        /// <summary>
-        /// Gets a role by id.
-        /// </summary>
-        /// <param name="id">Role id</param>
-        /// <returns>RoleDto</returns>
-        [HttpGet("{id}")]
-        public async Task<ActionResult<RoleDto>> GetRole(int id)
-        {
-            var role = await _context.Role.FindAsync(id);
-            if (role == null)
-            {
-                return NotFound();
-            }
-
-            var roleDto = _mapper.Map<RoleDto>(role);
-            return Ok(roleDto);
-        }
-
-       // PUT: api/Roles
-        [HttpPut]
-        public async Task<IActionResult> UpdateRole(int id, RoleCreateDto roleDto)
-        {
-            var role = await _context.Role.FindAsync(id);
-
-            if (role == null)
-            {
-                return NotFound();
-            }
-
-            _mapper.Map(roleDto, role);
-            _context.Entry(role).State = EntityState.Modified;
+            _logger.LogInformation("Getting all roles");
 
             try
             {
+                var roles = await _context.Role.ToListAsync();
+                _logger.LogInformation("Retrieved {Count} roles", roles.Count);
+
+                var roleDtos = _mapper.Map<IEnumerable<RoleDto>>(roles);
+                return Ok(roleDtos);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving roles");
+                return StatusCode(500, new { message = "Internal server error. Please try again later." });
+            }
+        }
+
+        /// <summary>
+        /// Obtiene un rol por ID.
+        /// </summary>
+        /// <param name="id">ID del rol.</param>
+        /// <returns>RoleDto.</returns>
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetRole(int id)
+        {
+            _logger.LogInformation("Getting role with ID: {Id}", id);
+
+            try
+            {
+                var role = await _context.Role.FindAsync(id);
+                if (role == null)
+                {
+                    _logger.LogWarning("Role with ID {Id} not found", id);
+                    return NotFound(new { message = "Role not found" });
+                }
+
+                var roleDto = _mapper.Map<RoleDto>(role);
+                _logger.LogInformation("Role with ID {Id} retrieved successfully", id);
+                return Ok(roleDto);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving role with ID {Id}", id);
+                return StatusCode(500, new { message = "Internal server error. Please try again later." });
+            }
+        }
+
+        /// <summary>
+        /// Actualiza un rol.
+        /// </summary>
+        /// <param name="id">ID del rol.</param>
+        /// <param name="roleDto">Datos del rol a actualizar.</param>
+        /// <returns>Resultado de la actualización.</returns>
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateRole(int id, [FromBody] RoleCreateDto roleDto)
+        {
+            _logger.LogInformation("Updating role with ID: {Id}", id);
+
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Invalid model state for role update with ID: {Id}", id);
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var role = await _context.Role.FindAsync(id);
+                if (role == null)
+                {
+                    _logger.LogWarning("Role with ID {Id} not found for update", id);
+                    return NotFound(new { message = "Role not found" });
+                }
+
+                _mapper.Map(roleDto, role);
+                _context.Entry(role).State = EntityState.Modified;
+
                 await _context.SaveChangesAsync();
+
+                _logger.LogInformation("Role with ID {Id} updated successfully", id);
+                return NoContent();
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!RoleExists(id))
                 {
-                    return NotFound();
+                    _logger.LogWarning("Role with ID {Id} not found during concurrency check", id);
+                    return NotFound(new { message = "Role not found" });
                 }
                 else
                 {
+                    _logger.LogError("Concurrency error updating role with ID {Id}", id);
                     throw;
                 }
             }
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating role with ID {Id}", id);
+                return StatusCode(500, new { message = "Internal server error. Please try again later." });
+            }
         }
 
         /// <summary>
-        /// Creates a new role and returns the new role with the generated ID.
+        /// Crea un nuevo rol.
         /// </summary>
-        /// <param name="roleDto">RoleDto</param>
-        /// <returns>Created RoleDto with ID</returns>
+        /// <param name="roleDto">Datos del nuevo rol.</param>
+        /// <returns>Rol creado con ID.</returns>
         [HttpPost]
-        public async Task<ActionResult<RoleDto>> CreateRole(RoleCreateDto roleDto)
+        public async Task<IActionResult> CreateRole([FromBody] RoleCreateDto roleDto)
         {
-            if (string.IsNullOrEmpty(roleDto.Description_Role))
+            _logger.LogInformation("Creating a new role");
+
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Invalid model state for role creation");
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                if (string.IsNullOrEmpty(roleDto.Description_Role))
                 {
+                    _logger.LogWarning("Description_Role is required for role creation");
                     return BadRequest("Description_Role is required.");
                 }
-            var role = _mapper.Map<Role>(roleDto);
 
-            _context.Role.Add(role);
-            await _context.SaveChangesAsync();
+                var role = _mapper.Map<Role>(roleDto);
+                _context.Role.Add(role);
+                await _context.SaveChangesAsync();
 
-            var createdRoleDto = _mapper.Map<RoleDto>(role);
+                var createdRoleDto = _mapper.Map<RoleDto>(role);
 
-            return CreatedAtAction(nameof(GetRole), new { id = createdRoleDto.IdRole }, createdRoleDto);
+                _logger.LogInformation("Role created successfully with ID: {Id}", createdRoleDto.IdRole);
+                return CreatedAtAction(nameof(GetRole), new { id = createdRoleDto.IdRole }, createdRoleDto);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating role");
+                return StatusCode(500, new { message = "Internal server error. Please try again later." });
+            }
         }
 
         /// <summary>
-        /// Deletes a role by id.
+        /// Elimina un rol por ID.
         /// </summary>
-        /// <param name="id">Role id</param>
-        /// <returns>NoContent if successful</returns>
+        /// <param name="id">ID del rol a eliminar.</param>
+        /// <returns>NoContent si se elimina correctamente.</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRole(int id)
         {
-            var role = await _context.Role.FindAsync(id);
-            if (role == null)
+            _logger.LogInformation("Deleting role with ID: {Id}", id);
+
+            try
             {
-                return NotFound();
+                var role = await _context.Role.FindAsync(id);
+                if (role == null)
+                {
+                    _logger.LogWarning("Role with ID {Id} not found for deletion", id);
+                    return NotFound(new { message = "Role not found" });
+                }
+
+                _context.Role.Remove(role);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("Role with ID {Id} deleted successfully", id);
+                return NoContent();
             }
-
-            _context.Role.Remove(role);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting role with ID {Id}", id);
+                return StatusCode(500, new { message = "Internal server error. Please try again later." });
+            }
         }
 
         private bool RoleExists(int id)
         {
-            return _context.Role.Any(e => e.IdRole == id);
+            try
+            {
+                _logger.LogInformation("Checking if role with ID {Id} exists", id);
+                var exists = _context.Role.Any(e => e.IdRole == id);
+                _logger.LogInformation("Role with ID {Id} exists: {Exists}", id, exists);
+                return exists;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error checking if role with ID {Id} exists", id);
+                return false;
+            }
         }
     }
 }

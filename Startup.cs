@@ -28,6 +28,16 @@ public class Startup
         services.AddControllers();
         services.AddLogging();
 
+        // Configuración de CORS
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowSpecificOrigin",
+                builder => builder
+                    .WithOrigins("https://localhost:5074/") 
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
+        });
+
         // Configuración de autenticación JWT
         services.AddAuthentication(options =>
         {
@@ -91,6 +101,9 @@ public class Startup
         app.UseHttpsRedirection();
 
         app.UseRouting();
+
+        // Usar CORS
+        app.UseCors("AllowSpecificOrigin");
 
         app.UseAuthentication();
         app.UseAuthorization();

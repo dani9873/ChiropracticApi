@@ -9,13 +9,13 @@ namespace ChiropracticApi.Data
     {
     }
 
-    public DbSet<User> User { get; set; }
-    public DbSet<Role> Role { get; set; }
-    public DbSet<Service> Service { get; set; }
-    public DbSet<Image> Image { get; set; }
-    public DbSet<Appointment> Appointment { get; set; }
-    public DbSet<UserAppointment> User_Appointment { get; set; }
-    public DbSet<AppointmentHistory> appointment_history { get; set; }
+    public required DbSet<User> User { get; set; }
+    public required DbSet<Role> Role { get; set; }
+    public required DbSet<Service> Service { get; set; }
+    public required DbSet<Image> Image { get; set; }
+    public required DbSet<Appointment> Appointment { get; set; }
+    public required DbSet<UserAppointment> User_Appointment { get; set; }
+    public required DbSet<AppointmentHistory> appointment_history { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -39,7 +39,7 @@ namespace ChiropracticApi.Data
             .WithOne(u => u.Role)
             .HasForeignKey(u => u.Role_idrole)
             .OnDelete(DeleteBehavior.Cascade);
-        
+
         modelBuilder.Entity<Image>()
             .HasOne(i => i.Service)
             .WithMany(s => s.Images)
@@ -57,7 +57,7 @@ namespace ChiropracticApi.Data
             .WithOne(ua => ua.Appointment)
             .HasForeignKey(ua => ua.Appointment_idappointment)
             .OnDelete(DeleteBehavior.Cascade);
-            
+
         modelBuilder.Entity<UserAppointment>()
             .HasOne(ua => ua.User)
             .WithMany(u => u.UserAppointments)
