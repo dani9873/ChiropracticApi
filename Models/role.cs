@@ -5,9 +5,7 @@ namespace ChiropracticApi.Models
         public int IdRole { get; set; }
         public string description_role { get; set; } = string.Empty;
         public List<User> Users { get; set; }  = new List<User>();
-    
     }
-
 
 
     public class Service
@@ -19,7 +17,7 @@ namespace ChiropracticApi.Models
         public int Duration { get; set; }
         public int Active { get; set; }
         public List<Image> Images { get; set; } = new List<Image>();
-        public List<UserAppointment> UserAppointments { get; set; } = new List<UserAppointment>();
+        public required List<UserAppointment> UserAppointments { get; set; } = new List<UserAppointment>();
     }
 
     public class Login
@@ -65,9 +63,10 @@ namespace ChiropracticApi.Models
         public DateTime? Canceled_At { get; set; }
         public DateTime? Created_At { get; set; }
         public DateTime? Updated_At { get; set; }
-        public List<UserAppointment> UserAppointments { get; set; }  = new List<UserAppointment>(); 
-        public List<AppointmentHistory> appointment_history { get; set; } = new List<AppointmentHistory>(); 
-    }
+        public List<AppointmentHistory> appointment_history { get; set; } = new List<AppointmentHistory>();
+        public List<UserAppointment> UserAppointments { get; set; }= new List<UserAppointment>();
+            
+        }
 
     public class UserAppointment
     {
@@ -89,12 +88,6 @@ namespace ChiropracticApi.Models
         public int Status { get; set; }
         public int Appointment_idappointment { get; set; }
         public required Appointment Appointment { get; set; }
-
-        // Constructor que inicializa la propiedad no anulable
-    public AppointmentHistory()
-    {
-        Appointment = new Appointment(); // Asegúrate de que esta inicialización tenga sentido en tu contexto
-    }
         public DateTime? Created_At { get; set; }
         public DateTime? Updated_At { get; set; }
     }

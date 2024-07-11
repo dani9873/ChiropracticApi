@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ChiropracticApi.Models;
+using ChiropracticApi.Dtos;
 
 namespace ChiropracticApi.Data
 {
@@ -16,7 +17,6 @@ namespace ChiropracticApi.Data
     public required DbSet<Appointment> Appointment { get; set; }
     public required DbSet<UserAppointment> User_Appointment { get; set; }
     public required DbSet<AppointmentHistory> appointment_history { get; set; }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Configurar claves primarias y relaciones

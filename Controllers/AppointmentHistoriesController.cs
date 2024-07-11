@@ -36,7 +36,10 @@ namespace ChiropracticApi.Controllers
         {
             _logger.LogInformation("Fetching all appointment histories");
 
-            var appointmentHistories = await _context.appointment_history.ToListAsync();
+            var appointmentHistories = await _context.appointment_history
+                .Include(ah => ah.Appointment)
+                .ToListAsync();
+
             var appointmentHistoryDtos = _mapper.Map<IEnumerable<AppointmentHistoryDto>>(appointmentHistories);
 
             _logger.LogInformation("Fetched {Count} appointment histories", appointmentHistoryDtos.Count());
@@ -55,8 +58,8 @@ namespace ChiropracticApi.Controllers
             _logger.LogInformation("Fetching appointment history with id {Id}", id);
 
             var appointmentHistory = await _context.appointment_history
+                .Include(ah => ah.Appointment)  
                 .FirstOrDefaultAsync(ah => ah.Idappointment_history == id);
-
             if (appointmentHistory == null)
             {
                 _logger.LogWarning("Appointment history with id {Id} not found", id);

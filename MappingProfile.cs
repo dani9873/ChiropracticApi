@@ -41,6 +41,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.IdAppointment, opt => opt.Ignore())
             .ForMember(dest => dest.UserAppointments, opt => opt.Ignore())
             .ForMember(dest => dest.appointment_history, opt => opt.Ignore());
+            
         CreateMap<AppointmentCreateDto, Appointment>()
             .ForMember(dest => dest.IdAppointment, opt => opt.Ignore())
             .ForMember(dest => dest.UserAppointments, opt => opt.Ignore())
@@ -63,9 +64,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Appointment, opt => opt.MapFrom(src => src.Appointment)) // Incluye la cita
             .ForMember(dest => dest.IdAppointmentHistory, opt => opt.MapFrom(src => src.Idappointment_history))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
-            .ForMember(dest => dest.Appointment_IdAppointment, opt => opt.MapFrom(src => src.Appointment_idappointment))
-            .ForMember(dest => dest.Created_At, opt => opt.MapFrom(src => src.Created_At))
-            .ForMember(dest => dest.Updated_At, opt => opt.MapFrom(src => src.Updated_At));
+            .ForMember(dest => dest.Appointment_IdAppointment, opt => opt.MapFrom(src => src.Appointment_idappointment));
         CreateMap<AppointmentHistoryDto, AppointmentHistory>()
             .ForMember(dest => dest.Idappointment_history, opt => opt.Ignore())
             .ForMember(dest => dest.Appointment, opt => opt.Ignore());

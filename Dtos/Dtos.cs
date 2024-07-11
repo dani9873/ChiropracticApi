@@ -38,7 +38,6 @@ namespace ChiropracticApi.Dtos
         public int? Gender { get; set; }
         public string Phone { get; set; } = string.Empty;
         public DateTime Last_Login { get; set; } = DateTime.Now;
-
         public int Role_idrole { get; set; }
     }
 
@@ -53,7 +52,7 @@ namespace ChiropracticApi.Dtos
     {
         public int IdUser_Appointment { get; set; }
         public int UserIdUsuario { get; set; }
-        public UserDto? User { get; set; } 
+        public UserDto User { get; set; } 
         public int Appointment_IdAppointment { get; set; }
         public int ServiceIdService { get; set; }
         public ServiceDto? Service { get; set; } 
@@ -64,10 +63,7 @@ namespace ChiropracticApi.Dtos
         public int IdAppointmentHistory { get; set; }
         public int Status { get; set; }
         public int Appointment_IdAppointment { get; set; }
-        public required AppointmentDto Appointment { get; set; }
-        public DateTime? Created_At { get; set; }
-        public DateTime? Updated_At { get; set; }
-
+        public AppointmentDto Appointment { get; set; }
     }
 
     public class AppointmentDto
@@ -77,5 +73,8 @@ namespace ChiropracticApi.Dtos
         public string Observation { get; set; } = string.Empty;
         public string Allergy { get; set; } = string.Empty;
         public int Status { get; set; }
+        public DateTime? Created_At { get; set; }
+        public DateTime? Updated_At { get; set; }
     }
+    
 }
