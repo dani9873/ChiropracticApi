@@ -1,11 +1,37 @@
 {
   "Version": 1,
-  "Hash": "WsyyBqyRsrsxShBx60g/KwlpRPjBlTPslsjHTD2/YT8=",
+  "Hash": "3OympHpnG6X00mPER+7wTdHXcq5Ysp8VdaQ506cs2h0=",
   "Source": "ChiropracticApi",
   "BasePath": "_content/ChiropracticApi",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "ChiropracticApi\\wwwroot",
+      "Source": "ChiropracticApi",
+      "ContentRoot": "C:\\Users\\Usuario\\Documents\\UMG\\CURSOS\\Angular platzi\\ChiropracticApi\\wwwroot\\",
+      "BasePath": "_content/ChiropracticApi",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\Usuario\\Documents\\UMG\\CURSOS\\Angular platzi\\ChiropracticApi\\wwwroot\\uploads\\66079f32-5bd8-401d-839e-d82127f16767_Imagen1.png",
+      "SourceId": "ChiropracticApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Usuario\\Documents\\UMG\\CURSOS\\Angular platzi\\ChiropracticApi\\wwwroot\\",
+      "BasePath": "_content/ChiropracticApi",
+      "RelativePath": "uploads/66079f32-5bd8-401d-839e-d82127f16767_Imagen1.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\66079f32-5bd8-401d-839e-d82127f16767_Imagen1.png"
+    }
+  ]
 }

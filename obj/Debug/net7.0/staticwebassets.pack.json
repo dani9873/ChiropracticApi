@@ -1,0 +1,25 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\Usuario\\Documents\\UMG\\CURSOS\\Angular platzi\\ChiropracticApi\\wwwroot\\uploads\\66079f32-5bd8-401d-839e-d82127f16767_Imagen1.png",
+      "PackagePath": "staticwebassets\\uploads\\66079f32-5bd8-401d-839e-d82127f16767_Imagen1.png"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.ChiropracticApi.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.build.ChiropracticApi.props",
+      "PackagePath": "build\\ChiropracticApi.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.buildMultiTargeting.ChiropracticApi.props",
+      "PackagePath": "buildMultiTargeting\\ChiropracticApi.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.buildTransitive.ChiropracticApi.props",
+      "PackagePath": "buildTransitive\\ChiropracticApi.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

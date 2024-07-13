@@ -9,11 +9,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ChiropracticApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
+
     public class AppointmentHistoriesController : ControllerBase
     {
         private readonly ChiropracticContext _context;
@@ -32,6 +36,7 @@ namespace ChiropracticApi.Controllers
         /// </summary>
         /// <returns>List of AppointmentHistoryDto</returns>
         [HttpGet]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult<IEnumerable<AppointmentHistoryDto>>> GetAppointmentHistories()
         {
             _logger.LogInformation("Fetching all appointment histories");
@@ -53,6 +58,7 @@ namespace ChiropracticApi.Controllers
         /// <param name="id">Appointment history id</param>
         /// <returns>AppointmentHistoryDto</returns>
         [HttpGet("{id}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult<AppointmentHistoryDto>> GetAppointmentHistory(int id)
         {
             _logger.LogInformation("Fetching appointment history with id {Id}", id);
@@ -79,6 +85,7 @@ namespace ChiropracticApi.Controllers
         /// <param name="appointmentHistoryDto">Appointment history data</param>
         /// <returns>NoContent if successful</returns>
         [HttpPut("{id}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> PutAppointmentHistory(int id, AppointmentHistoryCreateDto appointmentHistoryDto)
         {
             _logger.LogInformation("Updating appointment history with id {Id}", id);
@@ -121,6 +128,7 @@ namespace ChiropracticApi.Controllers
         /// <param name="appointmentHistoryDto">Appointment history data</param>
         /// <returns>Created AppointmentHistoryDto with ID</returns>
         [HttpPost]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<ActionResult<AppointmentHistoryDto>> PostAppointmentHistory(AppointmentHistoryCreateDto appointmentHistoryDto)
         {
             _logger.LogInformation("Creating new appointment history");
@@ -135,13 +143,14 @@ namespace ChiropracticApi.Controllers
 
             return CreatedAtAction(nameof(GetAppointmentHistory), new { id = createdAppointmentHistoryDto.IdAppointmentHistory }, createdAppointmentHistoryDto);
         }
-
+        
         /// <summary>
         /// Deletes an appointment history by id.
         /// </summary>
         /// <param name="id">Appointment history id</param>
         /// <returns>NoContent if successful</returns>
         [HttpDelete("{id}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> DeleteAppointmentHistory(int id)
         {
             _logger.LogInformation("Deleting appointment history with id {Id}", id);

@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ChiropracticApi.Controllers
 {
@@ -39,6 +40,7 @@ namespace ChiropracticApi.Controllers
         /// <param name="userDto">User details.</param>
         /// <returns>Result of the registration.</returns>
         [HttpPost("register")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> Register([FromBody] UserCreateDto userDto)
         {
             _logger.LogInformation("Registering new user");
@@ -57,7 +59,7 @@ namespace ChiropracticApi.Controllers
 
             var user = _mapper.Map<User>(userDto);
             user.Password = BCrypt.Net.BCrypt.HashPassword(userDto.Password);
-            user.Role_idrole = 2; // Assuming 2 is the default role for new users
+            user.Role_idrole = 2;
 
             try
             {
@@ -98,44 +100,44 @@ namespace ChiropracticApi.Controllers
 
             var token = GenerateJwtToken(user);
             _logger.LogInformation("User logged in successfully with email: {Email}", userDto.Email);
-            return Ok(new { token });
+            return Ok(token);
         }
 
         private string GenerateJwtToken(User user)
-{
-    if (user == null) throw new ArgumentNullException(nameof(user));
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
 
-    var claims = new[]
-    {
-        new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        new Claim(ClaimTypes.NameIdentifier, user.IdUsuario.ToString()),
-        new Claim(ClaimTypes.Email, user.Email),
-        new Claim(ClaimTypes.Role, user.Role_idrole.ToString()),
-    };
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.IdUsuario.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role_idrole.ToString()),
+            };
 
-    var key = _configuration["Jwt:Key"];
-    var issuer = _configuration["Jwt:Issuer"];
-    var audience = _configuration["Jwt:Audience"];
+            var key = _configuration["Jwt:Key"];
+            var issuer = _configuration["Jwt:Issuer"];
+            var audience = _configuration["Jwt:Audience"];
 
-    if (string.IsNullOrEmpty(key) || string.IsNullOrEmpty(issuer) || string.IsNullOrEmpty(audience))
-    {
-        throw new InvalidOperationException("JWT settings are not configured properly.");
-    }
+            if (string.IsNullOrEmpty(key) || string.IsNullOrEmpty(issuer) || string.IsNullOrEmpty(audience))
+            {
+                throw new InvalidOperationException("JWT settings are not configured properly.");
+            }
 
-    var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key));
-    var creds = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512);
+            var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key));
+            var creds = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512);
 
-    var token = new JwtSecurityToken(
-        issuer: issuer,
-        audience: audience,
-        claims: claims,
-        expires: DateTime.UtcNow.AddDays(1),
-        signingCredentials: creds
-    );
+            var token = new JwtSecurityToken(
+                issuer: issuer,
+                audience: audience,
+                claims: claims,
+                expires: DateTime.UtcNow.AddDays(1),
+                signingCredentials: creds
+            );
 
-    return new JwtSecurityTokenHandler().WriteToken(token);
-}
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
         private async Task<bool> UserExists(string email)
         {
             try

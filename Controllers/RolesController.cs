@@ -9,11 +9,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ChiropracticApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class RoleController : ControllerBase
     {
         private readonly ChiropracticContext _context;
@@ -32,6 +34,7 @@ namespace ChiropracticApi.Controllers
         /// </summary>
         /// <returns>Lista de RoleDto.</returns>
         [HttpGet]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> GetRoles()
         {
             _logger.LogInformation("Getting all roles");
@@ -57,6 +60,7 @@ namespace ChiropracticApi.Controllers
         /// <param name="id">ID del rol.</param>
         /// <returns>RoleDto.</returns>
         [HttpGet("{id}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> GetRole(int id)
         {
             _logger.LogInformation("Getting role with ID: {Id}", id);
@@ -88,6 +92,7 @@ namespace ChiropracticApi.Controllers
         /// <param name="roleDto">Datos del rol a actualizar.</param>
         /// <returns>Resultado de la actualización.</returns>
         [HttpPut("{id}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> UpdateRole(int id, [FromBody] RoleCreateDto roleDto)
         {
             _logger.LogInformation("Updating role with ID: {Id}", id);
@@ -141,6 +146,7 @@ namespace ChiropracticApi.Controllers
         /// <param name="roleDto">Datos del nuevo rol.</param>
         /// <returns>Rol creado con ID.</returns>
         [HttpPost]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> CreateRole([FromBody] RoleCreateDto roleDto)
         {
             _logger.LogInformation("Creating a new role");
@@ -181,6 +187,7 @@ namespace ChiropracticApi.Controllers
         /// <param name="id">ID del rol a eliminar.</param>
         /// <returns>NoContent si se elimina correctamente.</returns>
         [HttpDelete("{id}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> DeleteRole(int id)
         {
             _logger.LogInformation("Deleting role with ID: {Id}", id);

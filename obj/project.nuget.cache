@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "qLJLGLpRaAkEcV3vWrFltJatSrh6a+LVz6qyiRd+e3ID/cqOv6a/ec4WrUQde/rvEKKgn+XoJEg5Liq6IHZeEQ==",
+  "dgSpecHash": "aYY4IVr3hE8QmMUd17nUWdDEibVPpHSuVFOYTSB4aiAWNEctnEXTeyRfE3jU0CImwRnyrjYMcGEMNs5ctXalEA==",
   "success": true,
   "projectFilePath": "C:\\Users\\Usuario\\Documents\\UMG\\CURSOS\\Angular platzi\\ChiropracticApi\\ChiropracticApi.csproj",
   "expectedPackageFiles": [
@@ -9,6 +9,7 @@
     "C:\\Users\\Usuario\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\5.0.17\\microsoft.aspnetcore.authentication.jwtbearer.5.0.17.nupkg.sha512",
+    "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\8.0.7\\microsoft.aspnetcore.jsonpatch.8.0.7.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.5\\microsoft.aspnetcore.openapi.7.0.5.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.entityframeworkcore\\5.0.17\\microsoft.entityframeworkcore.5.0.17.nupkg.sha512",
@@ -34,6 +35,7 @@
     "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.identitymodel.tokens\\6.7.1\\microsoft.identitymodel.tokens.6.7.1.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\microsoft.openapi\\1.6.14\\microsoft.openapi.1.6.14.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\mysqlconnector\\1.3.7\\mysqlconnector.1.3.7.nupkg.sha512",
+    "C:\\Users\\Usuario\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\5.0.0\\pomelo.entityframeworkcore.mysql.5.0.0.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\swashbuckle.aspnetcore\\5.6.3\\swashbuckle.aspnetcore.5.6.3.nupkg.sha512",
     "C:\\Users\\Usuario\\.nuget\\packages\\swashbuckle.aspnetcore.annotations\\6.6.2\\swashbuckle.aspnetcore.annotations.6.6.2.nupkg.sha512",

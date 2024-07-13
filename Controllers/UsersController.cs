@@ -218,7 +218,7 @@ namespace ChiropracticApi.Controllers
         /// <param name="id">ID del usuario a eliminar.</param>
         /// <returns>Resultado de la eliminación.</returns>
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             _logger.LogInformation("Deleting user with ID: {Id}", id);

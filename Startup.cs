@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using AutoMapper;  // Importar AutoMapper
-using ChiropracticApi.Models;
+using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 public class Startup
 {
@@ -19,7 +21,6 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        // Configuración de DbContext para MySQL
         services.AddDbContext<ChiropracticContext>(options =>
             options.UseMySql(Configuration.GetConnectionString("DefaultConnection"),
             ServerVersion.AutoDetect(Configuration.GetConnectionString("DefaultConnection"))));
@@ -28,17 +29,15 @@ public class Startup
         services.AddControllers();
         services.AddLogging();
 
-        // Configuración de CORS
         services.AddCors(options =>
         {
             options.AddPolicy("AllowSpecificOrigin",
                 builder => builder
-                    .WithOrigins("https://localhost:5074/") 
+                    .WithOrigins("https://localhost:5074/")
                     .AllowAnyHeader()
                     .AllowAnyMethod());
         });
 
-        // Configuración de autenticación JWT
         services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -58,14 +57,11 @@ public class Startup
             };
         });
 
-        // Configuración de políticas de autorización
         services.AddAuthorization(options =>
         {
-            options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
-            options.AddPolicy("User", policy => policy.RequireRole("User"));
+            options.AddPolicy("AdminOnly", policy =>
+                policy.RequireClaim(ClaimTypes.Role, "2"));
         });
-
-        // Configuración de Swagger
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "Chiropractic API", Version = "v1" });
@@ -99,23 +95,15 @@ public class Startup
         }
 
         app.UseHttpsRedirection();
-
         app.UseRouting();
-
-        // Usar CORS
         app.UseCors("AllowSpecificOrigin");
-
         app.UseAuthentication();
         app.UseAuthorization();
-
-        // Configuración de Swagger
         app.UseSwagger();
         app.UseSwaggerUI(c =>
         {
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "Chiropractic API V1");
         });
-
-        // Configuración de los endpoints
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();

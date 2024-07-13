@@ -4,7 +4,7 @@ namespace ChiropracticApi.Models
     {
         public int IdRole { get; set; }
         public string description_role { get; set; } = string.Empty;
-        public List<User> Users { get; set; }  = new List<User>();
+        public List<User> Users { get; set; } = new List<User>();
     }
 
 
@@ -40,16 +40,17 @@ namespace ChiropracticApi.Models
         public DateTime? Created_At { get; set; }
         public DateTime? Updated_At { get; set; }
         public int Role_idrole { get; set; }
-        public required Role Role { get; set; } 
+        public required Role Role { get; set; }
         public List<UserAppointment> UserAppointments { get; set; } = new List<UserAppointment>();
     }
 
     public class Image
     {
         public int IdImage { get; set; }
-        public string Url { get; set; } = string.Empty;
+        public string FilePath { get; set; } = string.Empty;
+        public string FileName { get; set; } = string.Empty;
         public int Service_idservice { get; set; }
-        public required Service Service { get; set; }
+        public Service? Service { get; set; }
     }
 
     public class Appointment
@@ -64,15 +65,15 @@ namespace ChiropracticApi.Models
         public DateTime? Created_At { get; set; }
         public DateTime? Updated_At { get; set; }
         public List<AppointmentHistory> appointment_history { get; set; } = new List<AppointmentHistory>();
-        public List<UserAppointment> UserAppointments { get; set; }= new List<UserAppointment>();
-            
-        }
+        public List<UserAppointment> UserAppointments { get; set; } = new List<UserAppointment>();
+
+    }
 
     public class UserAppointment
     {
         public int IdUser_Appointment { get; set; }
         public int User_idusuario { get; set; }
-        public required User User { get; set; } 
+        public required User User { get; set; }
         public int Appointment_idappointment { get; set; }
         public required Appointment Appointment { get; set; }
         public int Service_idservice { get; set; }

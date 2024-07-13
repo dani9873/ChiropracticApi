@@ -34,6 +34,7 @@ namespace ChiropracticApi.Controllers
         /// </summary>
         /// <returns>Lista de servicios.</returns>
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetServices([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             _logger.LogInformation("Getting services - Page Number: {PageNumber}, Page Size: {PageSize}", pageNumber, pageSize);
@@ -63,6 +64,7 @@ namespace ChiropracticApi.Controllers
         /// <param name="id">ID del servicio.</param>
         /// <returns>Servicio encontrado.</returns>
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetService(int id)
         {
             _logger.LogInformation("Getting service with ID: {Id}", id);
@@ -94,6 +96,7 @@ namespace ChiropracticApi.Controllers
         /// <param name="serviceDto">Datos del servicio a actualizar.</param>
         /// <returns>Resultado de la actualización.</returns>
         [HttpPut("{id}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> PutService(int id, [FromBody] ServiceCreateDto serviceDto)
         {
             _logger.LogInformation("Updating service with ID: {Id}", id);
@@ -147,6 +150,7 @@ namespace ChiropracticApi.Controllers
         /// <param name="serviceDto">Datos del nuevo servicio.</param>
         /// <returns>Servicio creado.</returns>
         [HttpPost]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> PostService([FromBody] ServiceCreateDto serviceDto)
         {
             _logger.LogInformation("Creating a new service");
@@ -182,6 +186,7 @@ namespace ChiropracticApi.Controllers
         /// <param name="id">ID del servicio a eliminar.</param>
         /// <returns>Resultado de la eliminación.</returns>
         [HttpDelete("{id}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> DeleteService(int id)
         {
             _logger.LogInformation("Deleting service with ID: {Id}", id);

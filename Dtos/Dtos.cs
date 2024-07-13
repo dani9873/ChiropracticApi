@@ -44,7 +44,8 @@ namespace ChiropracticApi.Dtos
     public class ImageDto
     {
         public int IdImage { get; set; }
-        public string Url { get; set; } = string.Empty;
+        public string FilePath { get; set; } = string.Empty;
+        public string FileName { get; set; } = string.Empty;
         public int Service_idservice { get; set; }
     }
 
@@ -52,7 +53,7 @@ namespace ChiropracticApi.Dtos
     {
         public int IdUser_Appointment { get; set; }
         public int UserIdUsuario { get; set; }
-        public UserDto User { get; set; } 
+        public UserDto? User { get; set; } 
         public int Appointment_IdAppointment { get; set; }
         public int ServiceIdService { get; set; }
         public ServiceDto? Service { get; set; } 
@@ -63,7 +64,7 @@ namespace ChiropracticApi.Dtos
         public int IdAppointmentHistory { get; set; }
         public int Status { get; set; }
         public int Appointment_IdAppointment { get; set; }
-        public AppointmentDto Appointment { get; set; }
+        public AppointmentDto? Appointment { get; set; }
     }
 
     public class AppointmentDto

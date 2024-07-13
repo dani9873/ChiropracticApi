@@ -5,10 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using AutoMapper;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddLogging();
@@ -36,14 +37,12 @@ builder.Services.AddSwaggerGen(c =>
     }});
 });
 
-// Add the DbContext
 builder.Services.AddDbContext<ChiropracticContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
         ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
     ));
 
-// Configure JWT authentication and authorization
 var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key is not configured.");
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -62,16 +61,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("User", policy => policy.RequireRole("User"));
+    options.AddPolicy("AdminOnly", policy =>
+        policy.RequireClaim(ClaimTypes.Role, "2"));
 });
 
-// Configure AutoMapper
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();

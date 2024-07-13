@@ -31,14 +31,13 @@ namespace ChiropracticApi.Dtos
         public string Last_Name { get; set; }= string.Empty;
         public int? Age { get; set; }
         public int? Gender { get; set; }
-        public string Phone { get; set; }= string.Empty;
+        public string Phone { get; set; } = string.Empty;
         public DateTime? Last_Login { get; set; } = DateTime.Now;
     }
 
     public class ImageCreateDto
     {
-        public string Url { get; set; }= string.Empty;
-        public int Service_idservice { get; set; }
+        public int? Service_idservice { get; set; }
     }
 
     public class UserAppointmentCreateDto
